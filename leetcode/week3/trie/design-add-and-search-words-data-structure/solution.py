@@ -53,8 +53,8 @@ def run(ops, words):
 # obj = WordDictionary()
 # obj.addWord(word)
 # param_2 = obj.search(word)
-ops = ["WordDictionary", "addWord", "addWord",
-       "addWord", "search", "search", "search", "search", "search", "search", "addWord", "search"]
-words = [[], ["bad"], ["dad"], ["mad"], [
-    "pad"], ["bad"], [".ad"], ["b.."], ["b."], [".."], ["zz"], [".."]]
+ops = ["WordDictionary", "addWord", "addWord", "addWord", "search",
+       "search", "search", "search", "search", "search", "addWord", "search"]
+words = [[], ["bad"], ["dad"], ["mad"], ["pad"], ["bad"],
+         [".ad"], ["b.."], ["b."], [".."], ["zz"], [".."]]
 run(ops, words)
