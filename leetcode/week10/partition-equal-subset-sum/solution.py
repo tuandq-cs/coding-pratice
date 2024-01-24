@@ -6,24 +6,17 @@ class Solution:
         totalSum = sum(nums)
         if totalSum % 2 == 1:
             return False
-
         memo = {}
-        def solve(i: int, targetSum: int):
-            if memo.get(targetSum):
+        def solve(i:int, s: int):
+            if i >= len(nums) or s > totalSum // 2:
                 return False
-            if targetSum == nums[i]:
+            if s == totalSum // 2:
                 return True
-            if targetSum < nums[i]:
-                return False
-            for j in range(i+1, len(nums)):
-                if solve(j, targetSum-nums[i]):
-                    return True
-            memo[targetSum-nums[i]] = False
-            return False
-        for i in range(len(nums)):
-            if solve(i, totalSum // 2):
-                return True
-        return False
+            if memo.get(s) is not None:
+                return memo[s]
+            memo[s] = solve(i+1, s+nums[i]) or solve(i+1, s)
+            return memo[s]
+        return solve(0, 0)
 
 
 nums = [1,5,11,5,6,3,3]
