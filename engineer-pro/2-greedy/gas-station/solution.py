@@ -4,18 +4,18 @@ from typing import List
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
         n = len(gas)
-        profit = [None]*n
-        for i in range(0, n-1):
-            profit[i] = gas[i+1] - cost[i]
-        profit[n-1] = gas[0] - cost[n-1]
-        if sum(profit) < 0:
-            return -1
-        mIndex = None
-        for i in range(n):
-            if (gas[i]-cost[i] >= 0):
-                if mIndex is None or profit[i] + gas[i] > profit[mIndex] + gas[mIndex]:
-                    mIndex = i
-        return mIndex
+        curGas = 0
+        sIndex = 0
+        i = 0
+        remainGas = 0
+        while (i < n):
+            remainGas += gas[i] - cost[i]
+            curGas += gas[i] - cost[i]
+            if curGas < 0:
+                sIndex = i+1
+                curGas = 0
+            i += 1
+        return -1 if remainGas < 0 else sIndex
 
 
 gas = [5, 5, 1, 3, 4]
