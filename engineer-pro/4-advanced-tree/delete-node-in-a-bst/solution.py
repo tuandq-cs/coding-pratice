@@ -15,62 +15,75 @@ class TreeNode:
 
 class Solution:
     def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
-        node = self.findNode(root, key)
+        parent, node = self.findNode(root, key)
         if node is None:
             return root
-        _, leftMax = self.dfs(node.left)
-        if leftMax is not None:
-            tmp = leftMax.val
-            self.removeLeafNode(node, tmp)
-            node.val = tmp
+        maxNode, parMaxNode = self.findMaxNode(node.left)
+        if maxNode is not None:
+            maxNode.right = node.right
+            if maxNode != node.left:
+                mi, _ = self.findMinNode(maxNode)
+                mi.left = node.left
+                # remove maxNode from its parent
+                parMaxNode.right = None
+            if root == node:
+                return maxNode
+            if parent.left == node:
+                parent.left = maxNode
+            else:
+                parent.right = maxNode
             return root
-        rightMin, _ = self.dfs(node.right)
-        if rightMin is not None:
-            tmp = rightMin.val
-            self.removeLeafNode(node, tmp)
-            node.val = tmp
+        minNode, parMinNode = self.findMinNode(node.right)
+        if minNode is not None:
+            if minNode != node.right:
+                ma, _ = self.findMaxNode(minNode)
+                ma.right = node.right
+                # remove minNode from its parent
+                parMinNode.left = None
+            if root == node:
+                return minNode
+            if parent.left == node:
+                parent.left = minNode
+            else:
+                parent.right = minNode
             return root
-        # node is leaf
-        return self.removeLeafNode(root, node.val)
-
+        if root == node:
+            return None
+        if parent.left == node:
+            parent.left = None
+        else:
+            parent.right = None
+        return root
 
     def findNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
         curNode = root
+        parent = None
         while curNode != None and curNode.val != key:
+            parent = curNode
             if key < curNode.val:
                 curNode = curNode.left
             else:
                 curNode = curNode.right
-        return curNode
+        return parent, curNode
 
-    def dfs(self, node: Optional[TreeNode]):
+    def findMinNode(self, node: Optional[TreeNode]):
         if node is None:
             return None, None
-        minNode = maxNode = node
-        leftMin, _ = self.dfs(node.left)
-        if leftMin is not None:
-            minNode = leftMin
-        _, rightMax = self.dfs(node.right)
-        if rightMax is not None:
-            maxNode = rightMax
-        return minNode, maxNode
+        minNode = node
+        parMinNode = None
+
+        while minNode.left != None:
+            parMinNode = minNode
+            minNode = minNode.left 
+        return minNode, parMinNode
     
-    def removeLeafNode(self, node: Optional[TreeNode], val: int) -> Optional[TreeNode]:
-        curNode = node
-        prev = None
-        while curNode.val != val:
-            prev = curNode
-            if val < curNode.val:
-                curNode = curNode.left
-            else:
-                curNode = curNode.right
-        # Node is also root
-        if prev is None:
-            return None
-        if prev.left == curNode:
-            prev.left = None
-            return node
-        if prev.right == curNode:
-            prev.right = None
-            return node
-        return None
+    def findMaxNode(self, node: Optional[TreeNode]):
+        if node is None:
+            return None, None
+        maxNode = node
+        parMaxNode = None
+
+        while maxNode.right != None:
+            parMaxNode = maxNode
+            maxNode = maxNode.right 
+        return maxNode, parMaxNode
