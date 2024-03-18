@@ -15,6 +15,7 @@ class Solution:
         # case k > 0
         while (k > 0):
             monoStack.pop()
+            k -= 1
         # case k == 0
         while (i < len(num)):
             monoStack.append(num[i])
