@@ -1,4 +1,5 @@
 class Solution:
+    # https://leetcode.com/problems/freedom-trail/solutions/5077846/beated-freedom-trail
     def findRotateSteps(self, ring: str, key: str) -> int:
         n = len(ring)
         m = len(key)
